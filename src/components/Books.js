@@ -9,9 +9,9 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { addBook } from '../actions';
+import { addBook, removeBook } from '../actions';
 
-const Books = ({ books, dispatchAddBook }) => {
+const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
   const [name, setName] = useState('');
   const [author, setAuthor] = useState('');
 
@@ -28,10 +28,11 @@ const Books = ({ books, dispatchAddBook }) => {
       <ScrollView
         keyboardShouldPersistTaps="always"
         style={styles.booksContainer}>
-        {books.map((book, i) => (
-          <View key={i} style={styles.book}>
+        {books.map(book => (
+          <View key={book.id} style={styles.book}>
             <Text style={styles.name}>{book.name}</Text>
             <Text style={styles.author}>{book.author}</Text>
+            <Text onPress={() => dispatchRemoveBook(book.id)}>Remove</Text>
           </View>
         ))}
       </ScrollView>
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({ books: state.bookReducer.books });
 const mapDispatchToProps = {
   dispatchAddBook: book => addBook(book),
+  dispatchRemoveBook: id => removeBook(id),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Books);
