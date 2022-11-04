@@ -1,13 +1,16 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import Books from './src/components/Books';
+import rootReducer from './src/reducers';
+
+const store = createStore(rootReducer);
 
 const App = () => {
   return (
-    <SafeAreaView>
-      <View>
-        <Text>Hello world</Text>
-      </View>
-    </SafeAreaView>
+    <Provider store={store}>
+      <Books />
+    </Provider>
   );
 };
 
