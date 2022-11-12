@@ -16,32 +16,33 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
   const [name, setName] = useState('');
   const [author, setAuthor] = useState('');
 
+  const animatedValues = {
+    books: useRef(new Animated.Value(0)).current,
+    inputContainer: useRef(new Animated.Value(0)).current,
+  };
+
+  const animate = () => {
+    return Animated.stagger(200, [
+      Animated.timing(animatedValues.books, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animatedValues.inputContainer, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   const addBookHandler = () => {
     dispatchAddBook({ name, author });
     setName('');
     setAuthor('');
   };
 
-  const booksAnimatedValue = useRef(new Animated.Value(0)).current;
-  const inputContainerAnimatedValue = useRef(new Animated.Value(0)).current;
-  const animateBooks = () =>
-    Animated.timing(booksAnimatedValue, {
-      toValue: 1,
-      duration: 1_000,
-      useNativeDriver: true,
-    }).start();
-  const animateInputContainer = () =>
-    Animated.timing(inputContainerAnimatedValue, {
-      toValue: 1,
-      delay: 500,
-      duration: 1_000,
-      useNativeDriver: true,
-    }).start();
-
-  useEffect(() => {
-    animateBooks();
-    animateInputContainer();
-  });
+  useEffect(() => animate());
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,7 +55,7 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
           return (
             <Animated.View
               key={book.id}
-              style={[{ opacity: booksAnimatedValue }, styles.book]}>
+              style={[{ opacity: animatedValues.books }, styles.book]}>
               <Text style={styles.name}>{book.name}</Text>
               <Text style={styles.author}>{book.author}</Text>
               <Text onPress={() => dispatchRemoveBook(book.id)}>Remove</Text>
@@ -65,7 +66,7 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
 
       <Animated.View
         style={[
-          { opacity: inputContainerAnimatedValue },
+          { opacity: animatedValues.inputContainer },
           styles.inputContainer,
         ]}>
         <View style={styles.inputWrapper}>
