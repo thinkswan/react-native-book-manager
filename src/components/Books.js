@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
+  Animated,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -21,6 +22,27 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
     setAuthor('');
   };
 
+  const booksAnimatedValue = useRef(new Animated.Value(0)).current;
+  const inputContainerAnimatedValue = useRef(new Animated.Value(0)).current;
+  const animateBooks = () =>
+    Animated.timing(booksAnimatedValue, {
+      toValue: 1,
+      duration: 1_000,
+      useNativeDriver: true,
+    }).start();
+  const animateInputContainer = () =>
+    Animated.timing(inputContainerAnimatedValue, {
+      toValue: 1,
+      delay: 500,
+      duration: 1_000,
+      useNativeDriver: true,
+    }).start();
+
+  useEffect(() => {
+    animateBooks();
+    animateInputContainer();
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Books</Text>
@@ -28,16 +50,24 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
       <ScrollView
         keyboardShouldPersistTaps="always"
         style={styles.booksContainer}>
-        {books.map(book => (
-          <View key={book.id} style={styles.book}>
-            <Text style={styles.name}>{book.name}</Text>
-            <Text style={styles.author}>{book.author}</Text>
-            <Text onPress={() => dispatchRemoveBook(book.id)}>Remove</Text>
-          </View>
-        ))}
+        {books.map(book => {
+          return (
+            <Animated.View
+              key={book.id}
+              style={[{ opacity: booksAnimatedValue }, styles.book]}>
+              <Text style={styles.name}>{book.name}</Text>
+              <Text style={styles.author}>{book.author}</Text>
+              <Text onPress={() => dispatchRemoveBook(book.id)}>Remove</Text>
+            </Animated.View>
+          );
+        })}
       </ScrollView>
 
-      <View style={styles.inputContainer}>
+      <Animated.View
+        style={[
+          { opacity: inputContainerAnimatedValue },
+          styles.inputContainer,
+        ]}>
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
@@ -58,7 +88,7 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
             <Text style={styles.addButton}>+</Text>
           </View>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </SafeAreaView>
   );
 };
