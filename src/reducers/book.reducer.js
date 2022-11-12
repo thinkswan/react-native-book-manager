@@ -9,6 +9,26 @@ const initialState = {
       name: 'East of Eden',
       author: 'John Steinbeck',
     },
+    {
+      id: uuidv4(),
+      name: 'The Great Gatsby',
+      author: 'F. Scott Fitzgerald',
+    },
+    {
+      id: uuidv4(),
+      name: 'To Kill a Mockingbird',
+      author: 'Harper Lee',
+    },
+    {
+      id: uuidv4(),
+      name: '1984',
+      author: 'George Orwell',
+    },
+    {
+      id: uuidv4(),
+      name: 'Lolita',
+      author: 'Vladimir Nabokov',
+    },
   ],
 };
 
