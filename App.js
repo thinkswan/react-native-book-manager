@@ -1,10 +1,14 @@
+import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import Books from './src/components/Books';
-import rootReducer from './src/reducers';
+import Books from './src/features/books/Books';
+import booksReducer from './src/features/books/books-slice';
 
-const store = createStore(rootReducer);
+const store = configureStore({
+  reducer: {
+    books: booksReducer,
+  },
+});
 
 const App = () => {
   return (

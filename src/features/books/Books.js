@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { addBook, removeBook } from '../actions';
+import { addBook, removeBook } from './books-slice';
 
 const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
   const [name, setName] = useState('');
@@ -34,12 +34,6 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
         useNativeDriver: true,
       }),
     ]).start();
-  };
-
-  const addBookHandler = () => {
-    dispatchAddBook({ name, author });
-    setName('');
-    setAuthor('');
   };
 
   useEffect(() => animate());
@@ -84,7 +78,12 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={addBookHandler}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatchAddBook({ name, author });
+            setName('');
+            setAuthor('');
+          }}>
           <View style={styles.addButtonContainer}>
             <Text style={styles.addButton}>+</Text>
           </View>
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
   addButton: { fontSize: 28, lineHeight: 28 },
 });
 
-const mapStateToProps = state => ({ books: state.bookReducer.books });
+const mapStateToProps = state => ({ books: state.books });
 const mapDispatchToProps = {
   dispatchAddBook: book => addBook(book),
   dispatchRemoveBook: id => removeBook(id),

@@ -1,9 +1,10 @@
+import { createSlice } from '@reduxjs/toolkit';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
-import { ADD_BOOK, REMOVE_BOOK } from '../actions';
 
-const initialState = {
-  books: [
+const booksSlice = createSlice({
+  name: 'books',
+  initialState: [
     {
       id: uuidv4(),
       name: 'East of Eden',
@@ -30,21 +31,17 @@ const initialState = {
       author: 'Vladimir Nabokov',
     },
   ],
-};
+  reducers: {
+    addBook(state, action) {
+      state.push({ id: uuidv4(), ...action.payload });
+    },
+    removeBook(state, action) {
+      const bookIndex = state.findIndex(book => book.id === action.payload);
 
-const bookReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_BOOK:
-      return {
-        books: [...state.books, action.book],
-      };
-    case REMOVE_BOOK:
-      return {
-        books: state.books.filter(book => book.id !== action.id),
-      };
-    default:
-      return state;
-  }
-};
+      state.splice(bookIndex, 1);
+    },
+  },
+});
 
-export default bookReducer;
+export const { addBook, removeBook } = booksSlice.actions;
+export default booksSlice.reducer;
