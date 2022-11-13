@@ -43,8 +43,6 @@ const Books = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Books</Text>
-
       <ScrollView
         keyboardShouldPersistTaps="always"
         style={styles.booksContainer}>
@@ -98,12 +96,6 @@ const Books = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  title: {
-    fontSize: 20,
-    textAlign: 'center',
-    paddingTop: 30,
-    paddingBottom: 20,
-  },
   booksContainer: { flex: 1, borderTopWidth: 1, borderTopColor: '#ddd' },
   book: { padding: 20 },
   name: { fontSize: 18 },
