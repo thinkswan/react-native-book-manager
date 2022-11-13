@@ -9,12 +9,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addBook, removeBook } from './books-slice';
 
-const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
+const Books = () => {
   const [name, setName] = useState('');
   const [author, setAuthor] = useState('');
+
+  const books = useSelector(state => state.books);
+  const dispatch = useDispatch();
 
   const animatedValues = {
     books: useRef(new Animated.Value(0)).current,
@@ -52,7 +55,7 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
               style={[{ opacity: animatedValues.books }, styles.book]}>
               <Text style={styles.name}>{book.name}</Text>
               <Text style={styles.author}>{book.author}</Text>
-              <Text onPress={() => dispatchRemoveBook(book.id)}>Remove</Text>
+              <Text onPress={() => dispatch(removeBook(book.id))}>Remove</Text>
             </Animated.View>
           );
         })}
@@ -80,7 +83,7 @@ const Books = ({ books, dispatchAddBook, dispatchRemoveBook }) => {
 
         <TouchableOpacity
           onPress={() => {
-            dispatchAddBook({ name, author });
+            dispatch(addBook({ name, author }));
             setName('');
             setAuthor('');
           }}>
@@ -136,10 +139,4 @@ const styles = StyleSheet.create({
   addButton: { fontSize: 28, lineHeight: 28 },
 });
 
-const mapStateToProps = state => ({ books: state.books });
-const mapDispatchToProps = {
-  dispatchAddBook: book => addBook(book),
-  dispatchRemoveBook: id => removeBook(id),
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Books);
+export default Books;
